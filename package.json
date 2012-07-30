@@ -1,0 +1,6 @@
+requirements
+============
+
+mongoose-auth
+express < 3
+jade
