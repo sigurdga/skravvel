@@ -1,8 +1,12 @@
 conf = require './conf'
 express = require 'express'
 
-redis = require 'redis'
+#redis = require 'redis'
 connectredis = require 'connect-redis'
+
+connect = require 'connect'
+cookie = require 'cookie'
+socketio = require 'socket.io'
 
 redisstore = connectredis(express)
 sessionstore = new redisstore()
@@ -43,23 +47,52 @@ mongoose.connect('mongodb://localhost/example')
 User = mongoose.model('User')
 
 app = express.createServer express.bodyParser(),
-  express.static(__dirname + "/public"),
-  express.cookieParser(),
-  express.session secret: conf.secret, store: sessionstore
+  express.static(__dirname + "/static"),
   mongooseAuth.middleware()
 
 app.configure  () ->
   app.set('views', __dirname + '/views')
   app.set('view engine', 'jade')
+  app.use express.cookieParser()
+  app.use express.session(secret: conf.secret, store: sessionstore)
+  #app.use (req, res) ->
+  #res.end('<h2>Hello, your session id is ' + req.sessionID + '</h2>')
 
 app.get '/', (req, res) ->
-  res.render('home')
+  res.render 'home',
+    title: 'Testing'
 
 app.get '/logout', (req, res) ->
   req.logout()
-  res.redirect('/')
+  res.redirect '/'
 
-mongooseAuth.helpExpress(app)
+mongooseAuth.helpExpress app
+io = socketio.listen app
 
 app.listen(3000)
 console.log "Running"
+
+###########
+# socket io
+###########
+#
+# authorization
+# req.sessionID is a name used internally by connect?
+
+io.set 'authorization', (req, callback) ->
+  if req.headers.cookie
+    req.cookie = connect.utils.parseCookie req.headers.cookie
+    req.sessionID = req.cookie['connect.sid']
+    req.sessionStore = sessionstore
+    sessionstore.get req.sessionID, (err, session) ->
+      if err || !session
+        callback 'No session', false
+      else
+        req.session = new connect.middleware.session.Session(req, session)
+        callback null, true
+  else
+    return callback 'No cookie', false
+
+io.sockets.on 'connection', (socket) ->
+  console.log 'client connected'
+  console.log 'A socket with sessionID ' + socket.handshake.sessionID + ' connected!'

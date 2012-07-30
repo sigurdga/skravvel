@@ -1,9 +1,18 @@
-!!! 5
+doctype 5
 html
   head
-    title mongoose-auth example
-    script(src='http://static.ak.fbcdn.net/connect/en_US/core.js')
+    meta(charset="utf-8")
+    title= title
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/bootstrap-responsive.min.css')
+
   body
-    h1 mongoose-auth Example
-    #main
+    #container
       != body
+
+    script(src= "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
+    script(src='/socket.io/socket.io.js')
+    script(src='/js/bootstrap.js')
+    script(src='/js/client.js')

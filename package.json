@@ -7,3 +7,5 @@ express < 3
 jade
 redis
 connect-redis
+socket.io
+connect < 2
