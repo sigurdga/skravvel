@@ -7,6 +7,7 @@
 - else
   h2 Authenticated
   #user-id Logged in with `user.id` #{user.id} - aka `everyauth.user.id` #{everyauth.user.id}
+  #userinfo #{user} - #{everyauth.user}
   - if (everyauth.facebook)
     h3 Facebook User Data
     p= JSON.stringify(everyauth.facebook.user)

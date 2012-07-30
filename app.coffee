@@ -4,8 +4,8 @@ express = require 'express'
 redis = require 'redis'
 connectredis = require 'connect-redis'
 
-#redisstore = connectredis(express)
-#sessionstore = new redisstore()
+redisstore = connectredis(express)
+sessionstore = new redisstore()
 
 mongoose = require('mongoose')
 Schema = mongoose.Schema
@@ -45,7 +45,7 @@ User = mongoose.model('User')
 app = express.createServer express.bodyParser(),
   express.static(__dirname + "/public"),
   express.cookieParser(),
-  express.session secret: conf.secret#, store: sessionstore
+  express.session secret: conf.secret, store: sessionstore
   mongooseAuth.middleware()
 
 app.configure  () ->
