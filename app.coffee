@@ -61,10 +61,6 @@ app.get '/', (req, res) ->
   res.render 'home',
     title: 'Testing'
 
-app.get '/logout', (req, res) ->
-  req.logout()
-  res.redirect '/'
-
 mongooseAuth.helpExpress app
 io = socketio.listen app
 
