@@ -1,11 +1,10 @@
 conf = require './conf'
-express = require 'express'
+routes = require './routes'
 
-#redis = require 'redis'
+express = require 'express'
 connectredis = require 'connect-redis'
 
 connect = require 'connect'
-cookie = require 'cookie'
 socketio = require 'socket.io'
 
 redisstore = connectredis(express)
@@ -49,17 +48,19 @@ User = mongoose.model('User')
 app = express.createServer()
 
 app.configure  () ->
-  app.set('views', __dirname + '/views')
-  app.set('view engine', 'jade')
+  app.set 'views', __dirname + '/views'
+  app.set 'view engine', 'jade'
+  app.set 'view options', layout: false
   app.use express.bodyParser()
-  app.use express.static(__dirname + "/static")
+  app.use express.static __dirname + "/static"
   app.use express.cookieParser()
-  app.use express.session(secret: conf.secret, store: sessionstore)
+  app.use express.session secret: conf.secret, store: sessionstore
   app.use mongooseAuth.middleware()
 
-app.get '/', (req, res) ->
-  res.render 'home',
-    title: 'Testing'
+app.get '/', routes.index
+#app.get '/', (req, res) ->
+#res.render 'home',
+#title: 'Testing'
 
 mongooseAuth.helpExpress app
 io = socketio.listen app

@@ -1,0 +1,30 @@
+extends layout
+
+block content
+
+  - if (!everyauth.loggedIn)
+    h2 Not Authenticated
+    #twitter-login
+      a(href='/auth/twitter') Twitter
+    #google-login
+      a(href='/auth/google') Google
+  - else
+      .user
+        - if (everyauth.twitter)
+          p= everyauth.user.twit.name
+          p
+            img(src='#{everyauth.user.twit.profileImageUrl}')
+    h3
+      a(href='/logout') Logout  
+      
+
+
+  h1= title
+  p Welcome to #{title}
+
+  #results
+  form#channel
+    input#message(type= "text", placeholder= "Type Something...")
+    input(type= "submit", value= "Send")
+        
+  .debug=everyauth.user
