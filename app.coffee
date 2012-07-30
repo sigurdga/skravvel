@@ -46,17 +46,16 @@ mongoose.connect('mongodb://localhost/example')
 
 User = mongoose.model('User')
 
-app = express.createServer express.bodyParser(),
-  express.static(__dirname + "/static"),
-  mongooseAuth.middleware()
+app = express.createServer()
 
 app.configure  () ->
   app.set('views', __dirname + '/views')
   app.set('view engine', 'jade')
+  app.use express.bodyParser()
+  app.use express.static(__dirname + "/static")
   app.use express.cookieParser()
   app.use express.session(secret: conf.secret, store: sessionstore)
-  #app.use (req, res) ->
-  #res.end('<h2>Hello, your session id is ' + req.sessionID + '</h2>')
+  app.use mongooseAuth.middleware()
 
 app.get '/', (req, res) ->
   res.render 'home',
