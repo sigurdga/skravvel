@@ -7,6 +7,8 @@ connectredis = require 'connect-redis'
 connect = require 'connect'
 socketio = require 'socket.io'
 
+_ = require 'underscore'
+
 redisstore = connectredis(express)
 sessionstore = new redisstore()
 
@@ -45,6 +47,8 @@ mongoose.connect('mongodb://localhost/example')
 
 User = mongoose.model('User')
 
+connections = {}
+
 app = express.createServer()
 
 app.configure  () ->
@@ -58,9 +62,6 @@ app.configure  () ->
   app.use mongooseAuth.middleware()
 
 app.get '/', routes.index
-#app.get '/', (req, res) ->
-#res.render 'home',
-#title: 'Testing'
 
 mongooseAuth.helpExpress app
 io = socketio.listen app
@@ -91,4 +92,31 @@ io.set 'authorization', (req, callback) ->
 
 io.sockets.on 'connection', (socket) ->
   console.log 'client connected'
-  console.log 'A socket with sessionID ' + socket.handshake.sessionID + ' connected!'
+  if socket.handshake.session.auth.loggedIn
+    console.log socket.handshake.session.auth.userId
+    auth = socket.handshake.session.auth
+    if auth.twitter
+      console.log auth.twitter
+      username = auth.twitter.user.name
+      if !_.has(connections, username)
+        #connections[username] = new irc.Client 'oslo.irc.no', username.replace(/\W/g, '')
+        connections[username] = "IKFEA"
+        console.log "created for " + username
+      
+      console.log connections[username]
+      #socket.join(username)
+
+  #socket.on 'send', (data) ->
+    #connections[data.user].say(data.channel, data.message)
+
+  socket.on 'join', (data) ->
+    console.log data.channel
+    #connections[data.user].join(data.channel)
+    #connections[data.user].addListener 'message#' + data.channel, (from, message) ->
+      #console.log(data.channel)
+      #console.log(from)
+      #console.log message
+      #io.sockets.in(data.channel).emit 'distribute',
+        #channel: data.channel
+        #from: from
+        #message: message

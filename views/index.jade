@@ -26,5 +26,20 @@ block content
   form#channel
     input#message(type= "text", placeholder= "Type Something...")
     input(type= "submit", value= "Send")
+
+  .modal(class="hide", id="myModal")
+    form#join
+      .modal-header
+        button(type="button", class="close", data-dismiss="modal") ×
+        h3 Modal Header
+      .modal-body
+        p
+          label(for="joinchannel") Channel
+        p
+          input#joinchannel(type="text", placeholder="channel name (no #)")
+      .modal-footer
+        a(href="#", class="btn", data-dismiss="modal") Close
+        button(type="submit", class="btn btn-primary", data-dismiss="modal", id="modal-send") Save
+  a(class='btn', data-toggle='modal', href='#myModal') Join channel
         
   .debug=everyauth.user
