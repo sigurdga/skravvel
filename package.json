@@ -2,5 +2,8 @@ requirements
 ============
 
 mongoose-auth
+mongoose
 express < 3
 jade
+redis
+connect-redis
