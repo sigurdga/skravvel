@@ -130,11 +130,6 @@ io.sockets.on 'connection', (socket) ->
       if auth.loggedIn and auth.twitter and auth.twitter.user.name
         user = auth.twitter.user.name.replace(/\W/g, '')
         console.log user
-        #socket.join(user)
-        io.sockets.in(user).emit 'distribute',
-          channel: data.channel
-          message: "Velkommen"
-          from: "OPS"
         connections[user].join("#" + data.channel)
         connections[user].addListener 'message#' + data.channel, (from, message) ->
           console.log(data.channel)

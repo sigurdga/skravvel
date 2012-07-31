@@ -4,13 +4,13 @@
     var socket;
     socket = io.connect('http://local.host');
     socket.on('distribute', function(data) {
-      var channel, results;
+      var channel, datachannel;
       channel = $('#' + data.channel);
       if (channel.length) {
-        $('#' + data.channel + ' .results').append('<div>' + data.from + ': ' + data.message + '</div>');
-        results = $('#' + data.channel + ' .results');
-        return results.animate({
-          scrollTop: results[0].scrollHeight
+        $('#' + data.channel + ' .results').append('<tr><td class="timestamp">' + new Date().toShortTimeString() + '</td><td class="from">' + data.from + '</td><td>' + data.message + '</td></tr>');
+        datachannel = $('#' + data.channel);
+        return datachannel.animate({
+          scrollTop: datachannel[0].scrollHeight
         }, 1000);
       }
     });
@@ -22,7 +22,7 @@
         channel_div = $('#' + channel);
         if (!channel_div.length) {
           $('#channels').append('<li><a href="#' + channel + '" id="tab-' + channel + '" data-toggle="tab">' + channel + '</a></li>');
-          $('#screens').append('<div class="tab-pane" id="' + channel + '"><div class="results"></div></form></div>');
+          $('#screens').append('<div class="tab-pane" id="' + channel + '"><table class="results table-contensed table-bordered"></table></form></div>');
         }
       }
       $('#channels a:last').tab('show');
@@ -40,7 +40,7 @@
         message: message,
         channel: channel
       });
-      return $("#" + channel + ' .results').append('<div>' + user + ': ' + message + '</div>');
+      return $("#" + channel + ' .results').append('<tr class="originator"><td class="timestamp">' + new Date().toShortTimeString() + '</td><td class="from">' + user + '</td><td>' + message + '</td></tr>');
     });
     return $('#channeljoin').on('click', function(e) {
       var channel;
@@ -49,7 +49,7 @@
       $('#joinchannel').val("");
       if (!$('#' + channel).length) {
         $('#channels').append('<li><a href="#' + channel + '" id="tab-' + channel + '" data-toggle="tab">' + channel + '</a></li>');
-        $('#screens').append('<div class="tab-pane" id="' + channel + '"><div class="results"></div></form></div>');
+        $('#screens').append('<div class="tab-pane" id="' + channel + '"><table class="results table-contensed table-bordered"></table></form></div>');
         $('#tab-' + channel).tab('show');
         socket.emit('joinchannel', {
           channel: channel

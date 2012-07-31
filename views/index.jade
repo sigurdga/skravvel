@@ -2,34 +2,34 @@ extends layout
 
 block content
 
-  .pull-right
-    - if (!everyauth.loggedIn)
-      h2 Not Authenticated
-      #twitter-login
-        a(href='/auth/twitter') Twitter
-      #google-login
-        a(href='/auth/google') Google
-    - else
-        .user
-          - if (everyauth.twitter)
-            img(src='#{everyauth.user.twit.profileImageUrl}')
-            = everyauth.user.twit.name
-            a(href='/logout', class="btn") Log out  
+  #header
+    .pull-right
+      - if (!everyauth.loggedIn)
+        h2 Not Authenticated
+        #twitter-login
+          a(href='/auth/twitter') Twitter
+        #google-login
+          a(href='/auth/google') Google
+      - else
+          .user
+            - if (everyauth.twitter)
+              img(src='#{everyauth.user.twit.profileImageUrl}')
+              = everyauth.user.twit.name
+              a(href='/logout', class="btn") Log out  
       
-
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    p Welcome to #{title}
 
   - if (everyauth.loggedIn)
 
     a(class='btn btn-primary pull-right', data-toggle='modal', href='#myModal') Join channel
     ul(class="nav nav-tabs", id="channels")
+    #chat
+      div(class="tab-content", id="screens")
 
-    div(class="tab-content", id="screens")
-
-    form#say(class="hide row")
-      input#message(type= "text", placeholder= "…", class="pull-left span10")
-      input(type="submit", value= "Send", class="btn btn-primary btn-large pull-right")
+      form#say(class="hide")
+        input#message(type= "text", placeholder= "…", class="pull-left")
+        input#send(type="submit", value= "Send", class="btn btn-primary btn-large pull-right")
 
     .modal(class="hide", id="myModal")
       form#join

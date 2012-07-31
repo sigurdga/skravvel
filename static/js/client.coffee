@@ -3,16 +3,16 @@ $ ->
     socket.on 'distribute', (data) ->
       channel = $('#' + data.channel)
       if channel.length
-        $('#' + data.channel + ' .results').append('<div>' + data.from + ': ' + data.message + '</div>')
-        results = $('#' + data.channel + ' .results')
-        results.animate({scrollTop: results[0].scrollHeight}, 1000)
+        $('#' + data.channel + ' .results').append('<tr><td class="timestamp">' + new Date().toShortTimeString() + '</td><td class="from">' + data.from + '</td><td>' + data.message + '</td></tr>')
+        datachannel = $('#' + data.channel)
+        datachannel.animate({scrollTop: datachannel[0].scrollHeight}, 1000)
 
     socket.on 'channels', (data) ->
       for channel in data.channels
         channel_div = $('#' + channel)
         if not channel_div.length
           $('#channels').append '<li><a href="#' + channel+ '" id="tab-' + channel + '" data-toggle="tab">' + channel + '</a></li>'
-          $('#screens').append '<div class="tab-pane" id="' + channel + '"><div class="results"></div></form></div>'
+          $('#screens').append '<div class="tab-pane" id="' + channel + '"><table class="results table-contensed table-bordered"></table></form></div>'
       $('#channels a:last').tab('show')
       if data.channels.length
         $('#say').removeClass("hide")
@@ -32,7 +32,9 @@ $ ->
           message: message
           channel: channel
 
-        $("#" + channel + ' .results').append('<div>' + user + ': ' + message + '</div>')
+        $("#" + channel + ' .results').append('<tr class="originator"><td class="timestamp">' + new Date().toShortTimeString() + '</td><td class="from">' + user + '</td><td>' + message + '</td></tr>')
+        datachannel = $('#' + channel)
+        datachannel.animate({scrollTop: datachannel[0].scrollHeight}, 1000)
 
     $('#channeljoin').on 'click', (e) ->
         e.preventDefault & e.preventDefault()
@@ -40,7 +42,7 @@ $ ->
         $('#joinchannel').val("")
         if not $('#' + channel).length
           $('#channels').append '<li><a href="#' + channel+ '" id="tab-' + channel + '" data-toggle="tab">' + channel + '</a></li>'
-          $('#screens').append '<div class="tab-pane" id="' + channel + '"><div class="results"></div></form></div>'
+          $('#screens').append '<div class="tab-pane" id="' + channel + '"><table class="results table-contensed table-bordered"></table></form></div>'
           $('#tab-' + channel).tab 'show'
 
           socket.emit('joinchannel', {channel: channel})
