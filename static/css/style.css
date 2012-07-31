@@ -1,8 +1,28 @@
+html {
+    height: 100%;
+}
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+  padding: 0 50px;
+}
+
+#container {
+    height: 70%;
 }
 
 a {
   color: #00B7FF;
+}
+
+.tab-content, .tab-pane {
+    height: 100%;
+}
+.results {
+  height: 100%;
+  overflow-y: auto;
+}
+
+#say {
+  border-top: 1px solid #E5E5E5;
 }

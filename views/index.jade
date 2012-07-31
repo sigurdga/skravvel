@@ -2,44 +2,44 @@ extends layout
 
 block content
 
-  - if (!everyauth.loggedIn)
-    h2 Not Authenticated
-    #twitter-login
-      a(href='/auth/twitter') Twitter
-    #google-login
-      a(href='/auth/google') Google
-  - else
-      .user
-        - if (everyauth.twitter)
-          p= everyauth.user.twit.name
-          p
+  .pull-right
+    - if (!everyauth.loggedIn)
+      h2 Not Authenticated
+      #twitter-login
+        a(href='/auth/twitter') Twitter
+      #google-login
+        a(href='/auth/google') Google
+    - else
+        .user
+          - if (everyauth.twitter)
             img(src='#{everyauth.user.twit.profileImageUrl}')
-    h3
-      a(href='/logout') Logout  
+            = everyauth.user.twit.name
+            a(href='/logout', class="btn") Log out  
       
-
 
   h1= title
   p Welcome to #{title}
 
-  #results
-  form#channel
-    input#message(type= "text", placeholder= "Type Something...")
-    input(type= "submit", value= "Send")
+  - if (everyauth.loggedIn)
 
-  .modal(class="hide", id="myModal")
-    form#join
-      .modal-header
-        button(type="button", class="close", data-dismiss="modal") ×
-        h3 Modal Header
-      .modal-body
-        p
-          label(for="joinchannel") Channel
-        p
-          input#joinchannel(type="text", placeholder="channel name (no #)")
-      .modal-footer
-        a(href="#", class="btn", data-dismiss="modal") Close
-        button(type="submit", class="btn btn-primary", data-dismiss="modal", id="modal-send") Save
-  a(class='btn', data-toggle='modal', href='#myModal') Join channel
-        
-  .debug=everyauth.user
+    a(class='btn btn-primary pull-right', data-toggle='modal', href='#myModal') Join channel
+    ul(class="nav nav-tabs", id="channels")
+
+    div(class="tab-content", id="screens")
+
+    form#say(class="hide row")
+      input#message(type= "text", placeholder= "…", class="pull-left span10")
+      input(type="submit", value= "Send", class="btn btn-primary btn-large pull-right")
+
+    .modal(class="hide", id="myModal")
+      form#join
+        .modal-header
+          button(type="button", class="close", data-dismiss="modal") ×
+          h3 Join channel
+        .modal-body
+          p
+            input#joinchannel(type="text", placeholder="channel name")
+        .modal-footer
+          a(href="#", class="btn", data-dismiss="modal") Close
+          button(type="submit", class="btn btn-primary", data-dismiss="modal", id="channeljoin") Join
+

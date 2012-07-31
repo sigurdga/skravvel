@@ -10,3 +10,4 @@ connect-redis
 socket.io
 connect < 2
 underscore
+irc

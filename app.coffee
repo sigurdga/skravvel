@@ -7,6 +7,8 @@ connectredis = require 'connect-redis'
 connect = require 'connect'
 socketio = require 'socket.io'
 
+irc = require 'irc'
+
 _ = require 'underscore'
 
 redisstore = connectredis(express)
@@ -92,31 +94,53 @@ io.set 'authorization', (req, callback) ->
 
 io.sockets.on 'connection', (socket) ->
   console.log 'client connected'
-  if socket.handshake.session.auth.loggedIn
-    console.log socket.handshake.session.auth.userId
-    auth = socket.handshake.session.auth
+  auth = socket.handshake.session.auth
+  if auth && auth.loggedIn
+    console.log auth.userId
     if auth.twitter
       console.log auth.twitter
-      username = auth.twitter.user.name
+      username = auth.twitter.user.name.replace(/\W/g, '')
       if !_.has(connections, username)
-        #connections[username] = new irc.Client 'oslo.irc.no', username.replace(/\W/g, '')
-        connections[username] = "IKFEA"
+        connections[username] = new irc.Client 'oslo.irc.no', username 
+        #connections[username] = "IKFEA"
         console.log "created for " + username
       
       console.log connections[username]
-      #socket.join(username)
+      socket.join(username)
+      channels = _.map connections[username].chans, (obj, key) ->
+        return key.replace /^#/, ''
 
-  #socket.on 'send', (data) ->
-    #connections[data.user].say(data.channel, data.message)
+      socket.emit 'channels',
+        channels: channels
 
-  socket.on 'join', (data) ->
+  socket.on 'say', (data) ->
+    console.log data.message
     console.log data.channel
-    #connections[data.user].join(data.channel)
-    #connections[data.user].addListener 'message#' + data.channel, (from, message) ->
-      #console.log(data.channel)
-      #console.log(from)
-      #console.log message
-      #io.sockets.in(data.channel).emit 'distribute',
-        #channel: data.channel
-        #from: from
-        #message: message
+    auth = socket.handshake.session.auth
+    if auth and auth.twitter.user.name
+      user = auth.twitter.user.name.replace(/\W/g, '')
+      console.log user
+      connections[user].say("#" + data.channel, data.message)
+
+  socket.on 'joinchannel', (data) ->
+    console.log "join"
+    console.log data.channel
+    if socket.handshake.session.auth
+      auth = socket.handshake.session.auth
+      if auth.loggedIn and auth.twitter and auth.twitter.user.name
+        user = auth.twitter.user.name.replace(/\W/g, '')
+        console.log user
+        #socket.join(user)
+        io.sockets.in(user).emit 'distribute',
+          channel: data.channel
+          message: "Velkommen"
+          from: "OPS"
+        connections[user].join("#" + data.channel)
+        connections[user].addListener 'message#' + data.channel, (from, message) ->
+          console.log(data.channel)
+          console.log(from)
+          console.log message
+          io.sockets.in(user).emit 'distribute',
+            channel: data.channel
+            from: from
+            message: message
