@@ -14,7 +14,6 @@ body {
     height: 60px;
 }
 #window {
-    background-color: blue;
     position:absolute;
     top: 60px;
     bottom: 0;
@@ -37,7 +36,6 @@ a {
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: yellow;
 }
 .tab-pane {
     overflow: auto;
@@ -55,7 +53,6 @@ a {
 #say {
     height: 20px;
     width: 100%;
-  border-top: 1px solid #E5E5E5;
   position: absolute;
   bottom: 0;
 }
