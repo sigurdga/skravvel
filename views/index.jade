@@ -15,7 +15,10 @@ block content
             - if (everyauth.twitter)
               img(src='#{everyauth.user.twit.profileImageUrl}')
               = everyauth.user.twit.name
-              a(href='/logout', class="btn") Log out  
+            - if (everyauth.google)
+              = everyauth.user.google.name
+
+            a(href='/logout', class="btn") Log out  
       
     h1= title
     p Welcome to #{title}

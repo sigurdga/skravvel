@@ -29,7 +29,7 @@
       if (data.channels.length) return $('#say').removeClass("hide");
     });
     $('#say').on('submit', function(e) {
-      var active, channel, message, user;
+      var active, channel, datachannel, message, user;
       e.preventDefault & e.preventDefault();
       user = "you";
       message = $('#message').val();
@@ -40,7 +40,11 @@
         message: message,
         channel: channel
       });
-      return $("#" + channel + ' .results').append('<tr class="originator"><td class="timestamp">' + new Date().toShortTimeString() + '</td><td class="from">' + user + '</td><td>' + message + '</td></tr>');
+      $("#" + channel + ' .results').append('<tr class="originator"><td class="timestamp">' + new Date().toShortTimeString() + '</td><td class="from">' + user + '</td><td>' + message + '</td></tr>');
+      datachannel = $('#' + channel);
+      return datachannel.animate({
+        scrollTop: datachannel[0].scrollHeight
+      }, 1000);
     });
     return $('#channeljoin').on('click', function(e) {
       var channel;

@@ -104,16 +104,18 @@ io.sockets.on 'connection', (socket) ->
   if auth && auth.loggedIn
     console.log auth.userId
     if auth.twitter
-      console.log auth.twitter
-      username = auth.twitter.user.name.replace(/\W/g, '')
-      if !_.has(connections, username)
-        connections[username] = new irc.Client 'oslo.irc.no', username 
-        #connections[username] = "IKFEA"
-        console.log "created for " + username
+      username = auth.twitter.user.name
+    else if auth.google
+      username = auth.google.user.name
+    if username
+      user= username.replace(/\W/g, '')
+      if !_.has(connections, user)
+        connections[user] = new irc.Client 'oslo.irc.no', user
+        console.log "created for " + user
       
-      console.log connections[username]
-      socket.join(username)
-      channels = _.map connections[username].chans, (obj, key) ->
+      console.log connections[user]
+      socket.join(user)
+      channels = _.map connections[user].chans, (obj, key) ->
         return key.replace /^#/, ''
 
       socket.emit 'channels',
@@ -123,25 +125,32 @@ io.sockets.on 'connection', (socket) ->
     console.log data.message
     console.log data.channel
     auth = socket.handshake.session.auth
-    if auth and auth.twitter.user.name
-      user = auth.twitter.user.name.replace(/\W/g, '')
+    if auth.twitter
+      username = auth.twitter.user.name
+    else if auth.google
+      username = auth.google.user.name
+    if username
+      user = username.replace(/\W/g, '')
       console.log user
       connections[user].say("#" + data.channel, data.message)
 
   socket.on 'joinchannel', (data) ->
     console.log "join"
     console.log data.channel
-    if socket.handshake.session.auth
-      auth = socket.handshake.session.auth
-      if auth.loggedIn and auth.twitter and auth.twitter.user.name
-        user = auth.twitter.user.name.replace(/\W/g, '')
-        console.log user
-        connections[user].join("#" + data.channel)
-        connections[user].addListener 'message#' + data.channel, (from, message) ->
-          console.log(data.channel)
-          console.log(from)
-          console.log message
-          io.sockets.in(user).emit 'distribute',
-            channel: data.channel
-            from: from
-            message: message
+    auth = socket.handshake.session.auth
+    if auth.twitter
+      username = auth.twitter.user.name
+    else if auth.google
+      username = auth.google.user.name
+    if username
+      user = username.replace(/\W/g, '')
+      console.log user
+      connections[user].join("#" + data.channel)
+      connections[user].addListener 'message#' + data.channel, (from, message) ->
+        console.log(data.channel)
+        console.log(from)
+        console.log message
+        io.sockets.in(user).emit 'distribute',
+          channel: data.channel
+          from: from
+          message: message
