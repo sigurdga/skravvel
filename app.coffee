@@ -36,11 +36,17 @@ UserSchema.plugin mongooseAuth,
       redirectPath: '/'
   google:
     everyauth:
-      myHostname: 'http://localhost:3000'
+      myHostname: 'http://samklang.no:3000'
       appId: conf.google.clientId
       appSecret: conf.google.clientSecret
+      scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
       redirectPath: '/'
-      scope: 'https://www.google.com/m8/feeds'
+  github:
+    everyauth:
+      myHostname: 'http://local.host:3000'
+      appId: conf.github.clientId
+      appSecret: conf.github.clientSecret
+      redirectPath: '/'
 
 # Adds login: String
 mongoose.model('User', UserSchema)
