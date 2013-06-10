@@ -1,0 +1,8 @@
+module.exports = {
+  secret: 'the dog is lazy',
+  google: {
+    clientId: '',
+    clientSecret: ''
+  },
+  port: 3001
+};

@@ -2,7 +2,7 @@
 
   $(function() {
     var socket;
-    socket = io.connect('http://local.host');
+    socket = io.connect('http://localhost');
     socket.on('distribute', function(data) {
       var channel, datachannel;
       channel = $('#' + data.channel);
@@ -30,7 +30,7 @@
     });
     $('#say').on('submit', function(e) {
       var active, channel, datachannel, message, user;
-      e.preventDefault & e.preventDefault();
+      e.preventDefault();
       user = "you";
       message = $('#message').val();
       $('#message').val("");
@@ -48,7 +48,7 @@
     });
     return $('#channeljoin').on('click', function(e) {
       var channel;
-      e.preventDefault & e.preventDefault();
+      e.preventDefault();
       channel = $('#joinchannel').val();
       $('#joinchannel').val("");
       if (!$('#' + channel).length) {

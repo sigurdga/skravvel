@@ -4,26 +4,20 @@ block content
 
   #header
     .pull-right
-      - if (!everyauth.loggedIn)
+      - if (!user)
         h2 Not Authenticated
-        #twitter-login
-          a(href='/auth/twitter') Twitter
         #google-login
           a(href='/auth/google') Google
       - else
           .user
-            - if (everyauth.twitter)
-              img(src='#{everyauth.user.twit.profileImageUrl}')
-              = everyauth.user.twit.name
-            - if (everyauth.google)
-              = everyauth.user.google.name
+            = user.displayName
 
             a(href='/logout', class="btn") Log out  
       
     h1= title
     p Welcome to #{title}
 
-  - if (everyauth.loggedIn)
+  - if (user)
 
     a(class='btn btn-primary pull-right', data-toggle='modal', href='#myModal') Join channel
     ul(class="nav nav-tabs", id="channels")

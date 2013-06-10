@@ -1,13 +1,25 @@
-requirements
-============
-
-mongoose-auth
-mongoose
-express < 3
-jade
-redis
-connect-redis
-socket.io
-connect < 2
-underscore
-irc
+{
+        "author": "Sigurd Gartmann",
+        "name": "Skravvel",
+        "description": "Node and Socket to get IRC in your browser",
+        "version": "0.0.1",
+        "private": true,
+        "engines": {
+                "node": "~0.6.10 || 0.8 || 0.9 || 0.10"
+        },
+        "scripts": {
+                "start": "./node_modules/coffee-script/bin/coffee app.coffee"
+        },
+        "dependencies": {
+                "mongoose-auth": "",
+                "mongoose": "",
+                "express": "",
+                "jade": "",
+                "redis": "",
+                "connect-redis": "",
+                "socket.io": "",
+                "underscore": "",
+                "irc": "",
+                "cookie"
+        }
+}
