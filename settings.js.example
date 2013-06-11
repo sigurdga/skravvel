@@ -4,5 +4,8 @@ module.exports = {
     clientId: '',
     clientSecret: ''
   },
-  port: 3001
+  port: 3001,
+  irc: {
+    server: 'irc.efnet.net'
+  }
 };
