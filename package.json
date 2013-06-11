@@ -20,6 +20,8 @@
                 "socket.io": "",
                 "underscore": "",
                 "irc": "",
-                "cookie": ""
+                "cookie": "",
+                "passport": "",
+                "passport-google-oauth": ""
         }
 }
