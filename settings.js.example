@@ -2,7 +2,8 @@ module.exports = {
   secret: 'the dog is lazy',
   google: {
     clientId: '',
-    clientSecret: ''
+    clientSecret: '',
+    callbackURL: 'http://localhost:3001/auth/google/callback'
   },
   port: 3001,
   irc: {

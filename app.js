@@ -31,7 +31,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: conf.google.clientId,
     clientSecret: conf.google.clientSecret,
-    callbackURL: "http://localhost:3001/auth/google/callback"
+    callbackURL: conf.google.callbackURL
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
