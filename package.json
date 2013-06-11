@@ -20,6 +20,6 @@
                 "socket.io": "",
                 "underscore": "",
                 "irc": "",
-                "cookie"
+                "cookie": ""
         }
 }
