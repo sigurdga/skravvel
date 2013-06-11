@@ -121,7 +121,7 @@ io.sockets.on('connection', function (socket) {
         console.log(username);
         if (username){
             if (!_.has(connections, username)) {
-                connections[username] = new irc.Client('oslo.irc.no', username);
+                connections[username] = new irc.Client(conf.irc.server, username);
                 console.log("connected " + username);
             }
 
